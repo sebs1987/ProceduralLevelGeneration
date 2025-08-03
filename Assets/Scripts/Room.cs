@@ -7,7 +7,7 @@ public class Room : MonoBehaviour
     RectInt area;
 
 
-    public RectInt Area { get { return area; } }
+    public RectInt Area { get => area; }
 
 
     public Room(RectInt area)
@@ -25,8 +25,8 @@ public class Room : MonoBehaviour
 
         for (int x = minX; x < maxX; x++)
         {
-            hallwayCandidates.Add(new Hallway(new Vector2Int(x, 0)));
-            hallwayCandidates.Add(new Hallway(new Vector2Int(x, bottom)));
+            hallwayCandidates.Add(new Hallway(HallwayDirection.Bottom, new Vector2Int(x, 0)));
+            hallwayCandidates.Add(new Hallway(HallwayDirection.Top, new Vector2Int(x, bottom)));
         }
 
         int right = width - 1;
@@ -35,8 +35,8 @@ public class Room : MonoBehaviour
 
         for (int y = minY; y < maxY; y++)
         {
-            hallwayCandidates.Add(new Hallway(new Vector2Int(0, y)));
-            hallwayCandidates.Add(new Hallway(new Vector2Int(right, y)));
+            hallwayCandidates.Add(new Hallway(HallwayDirection.Left, new Vector2Int(0, y)));
+            hallwayCandidates.Add(new Hallway(HallwayDirection.Right, new Vector2Int(right, y)));
         }
 
         return hallwayCandidates;

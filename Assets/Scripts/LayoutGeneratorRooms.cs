@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class LayoutGeneratorRooms : MonoBehaviour
 {
@@ -14,11 +15,10 @@ public class LayoutGeneratorRooms : MonoBehaviour
     [SerializeField] private int roomLengthMax = 5;
 
     [SerializeField] private GameObject levelLayoutDisplay;
+    [SerializeField] private List<Hallway> openDoorways;
 
-    
-    private List<Hallway> openDoorways;
-
-    System.Random random;
+    private System.Random random;
+    private Level level;
 
 
     [ContextMenu("Generate Level Layout")]
@@ -26,8 +26,10 @@ public class LayoutGeneratorRooms : MonoBehaviour
     {
         random = new System.Random();
         openDoorways = new List<Hallway>();
+        level = new Level(width, length);
 
         RectInt roomRect = GetStartRoomRect();
+
         Debug.Log(roomRect);
 
         Room room = new Room(roomRect);
@@ -37,7 +39,15 @@ public class LayoutGeneratorRooms : MonoBehaviour
         hallways.ForEach(h => h.StartRoom = room);
         hallways.ForEach(h => openDoorways.Add(h));
 
-        DrawLayout(roomRect);
+        level.AddRoom(room);
+
+        Hallway selectedEntryway = openDoorways[random.Next(openDoorways.Count)];
+        Hallway selectedExit = SelectHallwayCandidate(new RectInt(0, 0, 5, 7), selectedEntryway);
+
+        Debug.Log(selectedExit.StartPosition);
+        Debug.Log(selectedExit.StartDirection);
+
+        DrawLayout(selectedEntryway, roomRect);
     }
 
     private RectInt GetStartRoomRect()
@@ -59,7 +69,7 @@ public class LayoutGeneratorRooms : MonoBehaviour
         return new RectInt(roomX, roomY, roomWidth, roomLength);
     }
 
-    private void DrawLayout(RectInt roomCandidateRect = new RectInt())
+    private void DrawLayout(Hallway selectedEntryway = null, RectInt roomCandidateRect = new RectInt())
     {
         Renderer renderer = levelLayoutDisplay.GetComponent<Renderer>();
 
@@ -70,15 +80,32 @@ public class LayoutGeneratorRooms : MonoBehaviour
         levelLayoutDisplay.transform.localScale = new Vector3(width, length, 1);
 
         layoutTexture.FillWithColor(Color.black);
-        layoutTexture.DrawRectangle(roomCandidateRect, Color.cyan);
 
-        //foreach (Hallway hallway in openDoorways)
-        //{
-        //    layoutTexture.SetPixel(hallway.StartPositionAbsolute.x, hallway.StartPositionAbsolute.y, Color.red);
-        //}
+        Array.ForEach(level.Rooms, room => layoutTexture.DrawRectangle(room.Area, Color.white));
+        Array.ForEach(level.Hallways, hallway => layoutTexture.DrawLine(hallway.StartPositionAbsolute, hallway.EndPositionAbsolute, Color.white));
 
-        openDoorways.ForEach(hallway => layoutTexture.SetPixel(hallway.StartPositionAbsolute.x, hallway.StartPositionAbsolute.y, Color.red));
+        layoutTexture.DrawRectangle(roomCandidateRect, Color.blue);
+
+        openDoorways.ForEach(hallway => layoutTexture.SetPixel(hallway.StartPositionAbsolute.x, hallway.StartPositionAbsolute.y, hallway.StartDirection.GetColor()));
+
+        if (selectedEntryway != null)
+        {
+            layoutTexture.SetPixel(selectedEntryway.StartPositionAbsolute.x, selectedEntryway.StartPositionAbsolute.y, Color.red);
+        }
 
         layoutTexture.SaveAsset();
+    }
+
+    private Hallway SelectHallwayCandidate(RectInt roomCandidateRect, Hallway entryway)
+    {
+        Room room = new Room(roomCandidateRect);
+
+        List<Hallway> candidates = room.CalculateAllPossibleDoorways(room.Area.width, room.Area.height, 1);
+
+        HallwayDirection requiredDirection = entryway.StartDirection.GetOppositeDirection();
+
+        List<Hallway> filteredHallwayCandidates = candidates.Where(hallwayCandidate => hallwayCandidate.StartDirection == requiredDirection).ToList();
+
+        return filteredHallwayCandidates.Count > 0 ? filteredHallwayCandidates[random.Next(filteredHallwayCandidates.Count)] : null;
     }
 }

@@ -10,8 +10,11 @@ public class Level : MonoBehaviour
     private List<Hallway> hallways;
 
 
-    public int Width { get { return width; } }
-    public int Length { get { return length; } }
+    public int Width => width;
+    public int Length => length;
+
+    public Room[] Rooms => rooms.ToArray();
+    public Hallway[] Hallways => hallways.ToArray();
 
 
     public Level(int width, int length)
@@ -22,4 +25,7 @@ public class Level : MonoBehaviour
         rooms = new List<Room>();
         hallways = new List<Hallway>();
     }
+
+    public void AddRoom(Room newRoom) => rooms.Add(newRoom);
+    public void AddHallway(Hallway hallway) => hallways.Add(hallway);
 }
