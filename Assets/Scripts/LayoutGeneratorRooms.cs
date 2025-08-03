@@ -72,10 +72,12 @@ public class LayoutGeneratorRooms : MonoBehaviour
         layoutTexture.FillWithColor(Color.black);
         layoutTexture.DrawRectangle(roomCandidateRect, Color.cyan);
 
-        foreach (Hallway hallway in openDoorways)
-        {
-            layoutTexture.SetPixel(hallway.StartPositionAbsolute.x, hallway.StartPositionAbsolute.y, Color.red);
-        }
+        //foreach (Hallway hallway in openDoorways)
+        //{
+        //    layoutTexture.SetPixel(hallway.StartPositionAbsolute.x, hallway.StartPositionAbsolute.y, Color.red);
+        //}
+
+        openDoorways.ForEach(hallway => layoutTexture.SetPixel(hallway.StartPositionAbsolute.x, hallway.StartPositionAbsolute.y, Color.red));
 
         layoutTexture.SaveAsset();
     }
