@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Hallway : MonoBehaviour
+public class Hallway
 {
     private Vector2Int startPosition;
     private Vector2Int endPosition;

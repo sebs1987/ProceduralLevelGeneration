@@ -2,13 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Room : MonoBehaviour
+public class Room
 {
     RectInt area;
 
-
-    public RectInt Area { get => area; }
-
+    public RectInt Area => area;
 
     public Room(RectInt area)
     {
@@ -19,14 +17,14 @@ public class Room : MonoBehaviour
     {
         List<Hallway> hallwayCandidates = new List<Hallway>();
 
-        int bottom = length - 1;
+        int top = length - 1;
         int minX = minDistanceFromEdge;
         int maxX = width - minDistanceFromEdge;
 
         for (int x = minX; x < maxX; x++)
         {
             hallwayCandidates.Add(new Hallway(HallwayDirection.Bottom, new Vector2Int(x, 0)));
-            hallwayCandidates.Add(new Hallway(HallwayDirection.Top, new Vector2Int(x, bottom)));
+            hallwayCandidates.Add(new Hallway(HallwayDirection.Top, new Vector2Int(x, top)));
         }
 
         int right = width - 1;
@@ -38,6 +36,8 @@ public class Room : MonoBehaviour
             hallwayCandidates.Add(new Hallway(HallwayDirection.Left, new Vector2Int(0, y)));
             hallwayCandidates.Add(new Hallway(HallwayDirection.Right, new Vector2Int(right, y)));
         }
+
+        Debug.Log(hallwayCandidates[0]);
 
         return hallwayCandidates;
     }
