@@ -65,12 +65,33 @@ public class Room
     {
         List<Hallway> possibleHallwayPositions = new List<Hallway>();
 
-        Hallway testHallway = new Hallway(HallwayDirection.Bottom, Vector2Int.zero);
-        Hallway testHallway2 = new Hallway(HallwayDirection.Left, Vector2Int.zero);
+        int width = layoutTexture.width;
+        int height = layoutTexture.height;
 
-        possibleHallwayPositions.Add(testHallway);
-        possibleHallwayPositions.Add(testHallway2);
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                Color pixelColor = layoutTexture.GetPixel(x, y);
+
+                HallwayDirection direction = GetHallwayDirection(pixelColor);
+
+                if (direction != HallwayDirection.Undefined)
+                {
+                    Hallway hallway = new Hallway(direction, new Vector2Int(x, y));
+
+                    possibleHallwayPositions.Add(hallway);
+                }
+            }
+        }
 
         return possibleHallwayPositions;
+    }
+
+    private HallwayDirection GetHallwayDirection(Color color)
+    {
+        Dictionary<Color, HallwayDirection> colorToDirectionMap = HallwayDirectionExtension.GetColorToDirectionMap();
+
+        return colorToDirectionMap.TryGetValue(color, out HallwayDirection hallwayDirection) ? hallwayDirection : HallwayDirection.Undefined;
     }
 }
