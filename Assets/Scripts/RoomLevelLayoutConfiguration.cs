@@ -12,6 +12,7 @@ public class RoomLevelLayoutConfiguration : ScriptableObject
     [SerializeField] private int doorDistanceFromEdge = 1;
     [SerializeField] private int minCorridorLength = 2;
     [SerializeField] private int maxCorridorLength = 5;
+    [SerializeField] private int minRoomCount = 7;
     [SerializeField] private int maxRoomCount = 10;
     [SerializeField] private int minRoomDistance = 1;
 
@@ -21,6 +22,7 @@ public class RoomLevelLayoutConfiguration : ScriptableObject
     public int DoorDistanceFromEdge => doorDistanceFromEdge;
     public int MinCorridorLength => minCorridorLength;
     public int MaxCorridorLength => maxCorridorLength;
+    public int MinRoomCount => minRoomCount;
     public int MaxRoomCount => maxRoomCount;
     public int MinRoomDistance => minRoomDistance;
 
