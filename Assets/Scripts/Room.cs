@@ -56,8 +56,6 @@ public class Room
             hallwayCandidates.Add(new Hallway(HallwayDirection.Right, new Vector2Int(right, y)));
         }
 
-        Debug.Log(hallwayCandidates[0]);
-
         return hallwayCandidates;
     }
 

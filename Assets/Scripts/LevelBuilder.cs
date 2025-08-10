@@ -11,6 +11,7 @@ public class LevelBuilder : MonoBehaviour
     [SerializeField] private MarchingSquares marchingSquares;
     [SerializeField] private NavMeshSurface navMeshSurface;
     [SerializeField] private RoomLevelLayoutConfiguration roomLevelLayoutConfiguration;
+    [SerializeField] private RoomDecorator roomDecorator;
 
     private Level level;
 
@@ -38,6 +39,7 @@ public class LevelBuilder : MonoBehaviour
         level = layoutGeneratorRooms.GenerateLevel();
 
         marchingSquares.CreateLevelGeometry();
+        roomDecorator.PlaceItems(level);
         navMeshSurface.BuildNavMesh();
 
         Room startRoom = level.playerStartRoom;
