@@ -40,13 +40,18 @@ public class RoomDecorator : MonoBehaviour
 
         TileType[,] levelDecorated = InitializeDecoratorArray();
 
-        DecorateRoom(levelDecorated, level.Rooms[0], decorationsTransform);
+        foreach(Room room in level.Rooms)
+        {
+            DecorateRoom(levelDecorated, room, decorationsTransform);
+        }
+
         GenerateTextureFromTileType(levelDecorated);
     }
 
     private void DecorateRoom(TileType[,] levelDecorated, Room room, Transform decorationsTransform)
     {
-        BaseDecoratorRule selectedRule = avaiableRules[0];
+        int selectedRuleIndex = random.Next(0, avaiableRules.Length);
+        BaseDecoratorRule selectedRule = avaiableRules[selectedRuleIndex];
 
         if (selectedRule.CanBeApplied(levelDecorated, room))
         {

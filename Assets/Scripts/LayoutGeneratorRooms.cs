@@ -97,7 +97,12 @@ public class LayoutGeneratorRooms : MonoBehaviour
 
         layoutTexture.Reinitialize(levelConfig.Width, levelConfig.Length);
 
-        levelLayoutDisplay.transform.localScale = new Vector3(levelConfig.Width, levelConfig.Length, 1);
+        int scale = SharedLevelData.Instance.Scale;
+        levelLayoutDisplay.transform.localScale = new Vector3(levelConfig.Width * scale, levelConfig.Length * scale, 1);
+
+        float xPos = level.Width * scale / 2.0f - scale;
+        float zPos = level.Length * scale / 2.0f - scale;
+        levelLayoutDisplay.transform.position = new Vector3(xPos, 0.1f, zPos);
 
         layoutTexture.FillWithColor(Color.black);
 
