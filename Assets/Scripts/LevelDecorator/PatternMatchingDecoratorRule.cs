@@ -12,6 +12,9 @@ public class PatternMatchingDecoratorRule : BaseDecoratorRule
     [SerializeField] private GameObject prefab;
     [SerializeField] private Array2DWrapper<TileType> placement;
     [SerializeField] private Array2DWrapper<TileType> fill;
+    [SerializeField] private float prefabRotation = 0;
+    [SerializeField] private bool centerHorizontally = false;
+    [SerializeField] private bool centerVertically = false;
 
     internal override void Apply(TileType[,] levelDecorated, Room room, Transform parent)
     {
@@ -29,9 +32,25 @@ public class PatternMatchingDecoratorRule : BaseDecoratorRule
             for (int x = 0; x < placement.Width; x++)
             {
                 TileType tileType = fill[x, y];
-                levelDecorated[occurrence.x + x, occurrence.y + y] = tileType;
+                
+                if (!TileType.Noop.Equals(tileType))
+                {
+                    levelDecorated[occurrence.x + x, occurrence.y + y] = tileType;
+                }
             }
         }
+
+        GameObject decoration = Instantiate(prefab, parent.transform);
+
+        Vector3 currentRotation = decoration.transform.eulerAngles;
+        decoration.transform.eulerAngles = currentRotation + new Vector3(0, prefabRotation, 0);
+
+        Vector3 center = new Vector3(occurrence.x + placement.Width / 2f, 0, occurrence.y + placement.Height / 2f);
+
+        int scale = SharedLevelData.Instance.Scale;
+
+        decoration.transform.position = (center + new Vector3(-1, 0, -1)) * scale;
+        decoration.transform.localScale = Vector3.one * scale;
     }
 
     internal override bool CanBeApplied(TileType[,] levelDecorated, Room room)
@@ -48,10 +67,23 @@ public class PatternMatchingDecoratorRule : BaseDecoratorRule
     {
         List<Vector2Int> occurrences = new List<Vector2Int>();
 
+        int centerX = room.Area.position.x + room.Area.width / 2 - placement.Width / 2;
+        int centerY = room.Area.position.y + room.Area.height / 2 - placement.Height / 2;
+
         for (int y = room.Area.position.y - 1; y < room.Area.position.y + room.Area.height + 2 - placement.Height; y++)
         {
             for (int x = room.Area.position.x - 1; x < room.Area.position.x + room.Area.width + 2 - placement.Width; x++)
             {
+                if (centerHorizontally && x != centerX)
+                {
+                    continue;
+                }
+
+                if (centerVertically && y != centerY)
+                {
+                    continue;
+                }
+
                 if (IsPatternPosition(levelDecorated, placement, x, y))
                 {
                     occurrences.Add(new Vector2Int(x, y));
@@ -68,7 +100,7 @@ public class PatternMatchingDecoratorRule : BaseDecoratorRule
         {
             for (int x = 0; x < pattern.Width; x++)
             {
-                if (levelDecorated[startX + x, startY + y] != pattern[x, y])
+                if (!TileType.Noop.Equals(pattern[x, y]) && levelDecorated[startX + x, startY + y] != pattern[x, y])
                 {
                     return false;
                 }
