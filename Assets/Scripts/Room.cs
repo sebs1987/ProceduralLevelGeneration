@@ -23,6 +23,7 @@ public class Room
 
     public RectInt Area => area;
     public Texture2D LayoutTexture { get; }
+    public int Connectedness => hallways.Count;
 
     public Room(RectInt area)
     {
@@ -107,5 +108,10 @@ public class Room
         Dictionary<Color, HallwayDirection> colorToDirectionMap = HallwayDirectionExtension.GetColorToDirectionMap();
 
         return colorToDirectionMap.TryGetValue(color, out HallwayDirection hallwayDirection) ? hallwayDirection : HallwayDirection.Undefined;
+    }
+
+    public void AddHallway(Hallway selectedHallway)
+    {
+        hallways.Add(selectedHallway);
     }
 }
