@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1a88f0d70ba1bb43afb4b6bf9d04fa5, type: 3}
   m_Name: TreasureRule
   m_EditorClassIdentifier: 
+  roomTypes: 16
   childRules:
   - {fileID: 11400000, guid: c3ac0c63a72c8f4499c42d9ea48eb157, type: 2}
   - {fileID: 11400000, guid: f83496b430b2d8440930a49b96ab0161, type: 2}

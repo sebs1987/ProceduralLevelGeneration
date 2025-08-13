@@ -1,10 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Flags = System.FlagsAttribute;
+
+[Flags]
+public enum RoomType
+{
+    Default = 1,
+    Start = 1 << 1,
+    Exit = 1 << 2,
+    Boss = 1 << 3,
+    Treasure = 1 << 4,
+    Prison = 1 << 5,
+    Library = 1 << 6,
+    Kitchen = 1 << 7
+}
 
 public class Room
 {
-    RectInt area;
+    private List<Hallway> hallways;
+    private RectInt area;
 
     public RectInt Area => area;
     public Texture2D LayoutTexture { get; }
@@ -12,6 +27,7 @@ public class Room
     public Room(RectInt area)
     {
         this.area = area;
+        hallways = new List<Hallway>();
     }
 
     public Room(int x, int y, Texture2D layoutTexture)
