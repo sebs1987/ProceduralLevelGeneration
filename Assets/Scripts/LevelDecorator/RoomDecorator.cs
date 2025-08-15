@@ -72,6 +72,7 @@ public class RoomDecorator : MonoBehaviour
         int maxNumberOfDecorations = room.Area.width * room.Area.height * 2;
 
         List<RuleAvailability> availableRulesForRoom = CopyRuleAvailability();
+        availableRulesForRoom = availableRulesForRoom.Where(ra => ra.rule.RoomTypes.HasFlag(room.Type)).ToList();
 
         while (currentTries < maxTries && availableRulesForRoom.Count > 0 && currentNumberOfDecorations < maxNumberOfDecorations)
         {

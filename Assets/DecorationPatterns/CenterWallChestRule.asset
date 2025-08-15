@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0deaf6b64ae000b469c09a43cc2b0a8b, type: 3}
   m_Name: CenterWallChestRule
   m_EditorClassIdentifier: 
+  roomTypes: 96
   prefab: {fileID: 3559189437766448836, guid: 9ed12fbf1b3c29e4fb046b842f605b25, type: 3}
   placement:
     array: 040000000400000004000000020000000200000002000000
@@ -21,5 +22,6 @@ MonoBehaviour:
     array: 040000000400000004000000020000000600000002000000
     width: 3
     height: 2
+  prefabRotation: 0
   centerHorizontally: 1
   centerVertically: 0

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0deaf6b64ae000b469c09a43cc2b0a8b, type: 3}
   m_Name: CornerRule 3
   m_EditorClassIdentifier: 
+  roomTypes: 1
   prefab: {fileID: 8581199221019813276, guid: d041227ca0172234fac818817b5b4cc5, type: 3}
   placement:
     array: 04000000040000000200000004000000
