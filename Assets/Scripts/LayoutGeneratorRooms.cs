@@ -46,13 +46,25 @@ public class LayoutGeneratorRooms : MonoBehaviour
         Hallway selectedEntryway = openDoorways[random.Next(openDoorways.Count)];
 
         AddRooms();
-
+        AddHallwaysToRoom();
         DrawLayout(selectedEntryway, roomRect);
 
         int startRoomIndex = random.Next(0, level.Rooms.Length);
         level.playerStartRoom = level.Rooms[startRoomIndex];
 
         return level;
+    }
+
+    private void AddHallwaysToRoom()
+    {
+        foreach (Room room in level.Rooms)
+        {
+            Hallway[] hallwaysStartingAtRoom = Array.FindAll(level.Hallways, hallway => hallway.StartRoom == room);
+            Array.ForEach(hallwaysStartingAtRoom, hallway => room.AddHallway(hallway));
+
+            Hallway[] hallwaysEndingAtRoom = Array.FindAll(level.Hallways, hallway => hallway.EndRoom == room);
+            Array.ForEach(hallwaysEndingAtRoom, hallway => room.AddHallway(hallway));
+        }
     }
 
     [ContextMenu("Generate New Seed")]
@@ -116,6 +128,8 @@ public class LayoutGeneratorRooms : MonoBehaviour
             {
                 layoutTexture.DrawRectangle(room.Area, Color.white);
             }
+
+            Debug.Log(room.Area + " " + room.Connectedness);
         }
 
         Array.ForEach(level.Hallways, hallway => layoutTexture.DrawLine(hallway.StartPositionAbsolute, hallway.EndPositionAbsolute, Color.white));

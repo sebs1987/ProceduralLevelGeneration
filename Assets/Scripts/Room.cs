@@ -35,6 +35,7 @@ public class Room
     {
         area = new RectInt(x, y, layoutTexture.width, layoutTexture.height);
         LayoutTexture = layoutTexture;
+        hallways = new List<Hallway>();
     }
 
     public List<Hallway> CalculateAllPossibleDoorways(int width, int length, int minDistanceFromEdge)
